@@ -8,13 +8,13 @@ import {
   extendTheme,
   TranslationProvider,
   ActionSheetProvider,
-} from './src/core/dopebase'
+} from './src/Core/dopebase'
 import configureStore from './src/redux/store'
 import AppContent from './src/AppContent'
 import translations from './src/translations/'
 import { ConfigProvider } from './src/config'
-import { AuthProvider } from './src/core/onboarding/hooks/useAuth'
-import { authManager } from './src/core/onboarding/api'
+import { AuthProvider } from './src/Core/onboarding/hooks/useAuth'
+import { authManager } from './src/Core/onboarding/api'
 import InstamobileTheme from './src/theme'
 
 const store = configureStore()

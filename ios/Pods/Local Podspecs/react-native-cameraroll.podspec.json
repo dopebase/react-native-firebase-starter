@@ -1,0 +1,20 @@
+{
+  "name": "react-native-cameraroll",
+  "version": "5.7.2",
+  "summary": "React Native Camera Roll for iOS & Android",
+  "license": "MIT",
+  "authors": "Bartol Karuza <bartol.k@gmail.com>",
+  "homepage": "https://github.com/react-native-cameraroll/react-native-cameraroll#readme",
+  "platforms": {
+    "ios": "9.0",
+    "tvos": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/react-native-community/react-native-cameraroll.git",
+    "tag": "v5.7.2"
+  },
+  "source_files": "ios/**/*.{h,m,mm}",
+  "dependencies": {
+    "React-Core": []
+  }
+}

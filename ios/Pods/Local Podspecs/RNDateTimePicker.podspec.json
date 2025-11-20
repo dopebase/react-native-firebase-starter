@@ -1,0 +1,21 @@
+{
+  "name": "RNDateTimePicker",
+  "version": "6.2.0",
+  "summary": "DateTimePicker component for React Native",
+  "description": "DateTimePicker component for React Native",
+  "license": "MIT",
+  "authors": "Martijn Swaagman <mswaagman@godaddy.com> (https://github.com/swaagie)",
+  "homepage": "https://github.com/react-native-community/datetimepicker#readme",
+  "platforms": {
+    "ios": "11.0"
+  },
+  "source": {
+    "git": "https://github.com/react-native-community/datetimepicker",
+    "tag": "v6.2.0"
+  },
+  "source_files": "ios/*.{h,m}",
+  "requires_arc": true,
+  "dependencies": {
+    "React-Core": []
+  }
+}

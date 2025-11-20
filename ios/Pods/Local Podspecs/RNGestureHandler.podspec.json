@@ -1,0 +1,36 @@
+{
+  "name": "RNGestureHandler",
+  "version": "2.29.1",
+  "summary": "Declarative API exposing native platform touch and gesture system to React Native",
+  "homepage": "https://github.com/software-mansion/react-native-gesture-handler",
+  "license": "MIT",
+  "authors": {
+    "Krzysztof Magiera": "krzys.magiera@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/software-mansion/react-native-gesture-handler",
+    "tag": "2.29.1"
+  },
+  "source_files": "apple/**/*.{h,m,mm}",
+  "requires_arc": true,
+  "platforms": {
+    "ios": "11.0",
+    "tvos": "11.0",
+    "osx": "10.15",
+    "visionos": "1.0"
+  },
+  "xcconfig": {
+    "OTHER_CFLAGS": "$(inherited)  -DREACT_NATIVE_MINOR_VERSION=71"
+  },
+  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32",
+  "dependencies": {
+    "React-Core": [],
+    "RCT-Folly": [
+      "2021.07.22.00"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/boost\"",
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++17"
+  }
+}

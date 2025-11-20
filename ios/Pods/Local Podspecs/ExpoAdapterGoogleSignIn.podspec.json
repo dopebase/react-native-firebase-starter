@@ -1,0 +1,30 @@
+{
+  "name": "ExpoAdapterGoogleSignIn",
+  "version": "10.0.1",
+  "summary": "Google Signin for your react native applications",
+  "description": "Google Signin for your react native applications",
+  "license": "MIT",
+  "authors": "Vojtech Novak <vonovak@gmail.com> (https://github.com/vonovak)",
+  "homepage": "https://github.com/react-native-google-signin/google-signin#readme",
+  "platforms": {
+    "ios": "13.0"
+  },
+  "swift_versions": "5.4",
+  "source": {
+    "git": "https://github.com/react-native-google-signin/google-signin.git",
+    "tag": "v10.0.1"
+  },
+  "static_framework": true,
+  "dependencies": {
+    "ExpoModulesCore": [],
+    "React-Core": [],
+    "GoogleSignIn": [
+      "~> 7.0"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES"
+  },
+  "source_files": "ExpoAdapterGoogleSignIn/**/*.{h,m,swift}",
+  "swift_version": "5.4"
+}

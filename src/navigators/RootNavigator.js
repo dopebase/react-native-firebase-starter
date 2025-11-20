@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import { LoadScreen, WalkthroughScreen } from '../core/onboarding'
+import { LoadScreen, WalkthroughScreen } from '../Core/onboarding'
 import HomeStackNavigator from './HomeStackNavigator'
 import LoginStack from './AuthStackNavigator'
 
