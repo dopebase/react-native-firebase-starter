@@ -131,9 +131,22 @@ const SignupScreen = () => {
       userDetails.username = userDetails.username?.toLowerCase()
     }
 
-    authManager
-      .createAccountWithEmailAndPassword(userDetails, config)
+    const timeout = new Promise((resolve) => {
+      setTimeout(() => resolve({ timeout: true }), 5000)
+    })
+
+    Promise.race([authManager.createAccountWithEmailAndPassword(userDetails, config), timeout])
       .then(response => {
+        if (response?.timeout) {
+          setLoading(false)
+          Alert.alert(
+            '',
+            localized('Sign up timed out. Please check your connection or rebuild the app.'),
+            [{ text: localized('OK') }],
+            { cancelable: false }
+          )
+          return
+        }
         const user = response.user
         if (user) {
           dispatch(setUserData({ user }))
@@ -153,6 +166,16 @@ const SignupScreen = () => {
             },
           )
         }
+      })
+      .catch(error => {
+        console.log(error)
+        setLoading(false)
+        Alert.alert(
+          '',
+          localized('An error occurred. Please try again.'),
+          [{ text: localized('OK') }],
+          { cancelable: false }
+        )
       })
   }
 

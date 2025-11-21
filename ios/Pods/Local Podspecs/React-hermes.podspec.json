@@ -1,53 +1,55 @@
 {
   "name": "React-hermes",
-  "version": "0.71.3",
+  "version": "0.79.7",
   "summary": "Hermes engine for React Native",
   "homepage": "https://reactnative.dev/",
   "license": "MIT",
-  "authors": "Facebook, Inc. and its affiliates",
+  "authors": "Meta Platforms, Inc. and its affiliates",
   "platforms": {
-    "osx": "10.14",
-    "ios": "12.4"
+    "ios": "15.1"
   },
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.71.3"
+    "tag": "v0.79.7"
   },
+  "public_header_files": "executor/HermesExecutorFactory.h",
   "source_files": [
     "executor/*.{cpp,h}",
-    "inspector/*.{cpp,h}",
-    "inspector/chrome/*.{cpp,h}",
-    "inspector/detail/*.{cpp,h}"
+    "inspector-modern/chrome/*.{cpp,h}",
+    "executor/HermesExecutorFactory.h"
   ],
-  "public_header_files": "executor/HermesExecutorFactory.h",
-  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_HAVE_CLOCK_GETTIME=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-documentation",
+  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DFOLLY_HAVE_CLOCK_GETTIME=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-documentation",
   "pod_target_xcconfig": {
-    "HEADER_SEARCH_PATHS": "\"${PODS_ROOT}/hermes-engine/destroot/include\" \"$(PODS_TARGET_SRCROOT)/..\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/libevent/include\"",
-    "GCC_PREPROCESSOR_DEFINITIONS": "HERMES_ENABLE_DEBUGGER=1"
+    "HEADER_SEARCH_PATHS": "\"${PODS_ROOT}/hermes-engine/destroot/include\" \"$(PODS_TARGET_SRCROOT)/..\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/RCT-Folly\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/fmt/include\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector/jsinspector_modern.framework/Headers\" \"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspectortracing/jsinspector_moderntracing.framework/Headers\"",
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++20",
+    "DEFINES_MODULE": "YES"
   },
   "header_dir": "reacthermes",
   "dependencies": {
     "React-cxxreact": [
-      "0.71.3"
+      "0.79.7"
     ],
     "React-jsiexecutor": [
-      "0.71.3"
+      "0.79.7"
     ],
-    "React-jsinspector": [
-      "0.71.3"
-    ],
+    "React-jsinspector": [],
+    "React-jsinspectortracing": [],
     "React-perflogger": [
-      "0.71.3"
+      "0.79.7"
     ],
     "RCT-Folly": [
-      "2021.07.22.00"
+      "2024.11.18.00"
     ],
     "DoubleConversion": [],
-    "glog": [],
-    "RCT-Folly/Futures": [
-      "2021.07.22.00"
+    "fast_float": [
+      "6.1.4"
     ],
+    "fmt": [
+      "11.0.2"
+    ],
+    "glog": [],
     "hermes-engine": [],
-    "React-jsi": []
+    "React-jsi": [],
+    "React-runtimeexecutor": []
   }
 }

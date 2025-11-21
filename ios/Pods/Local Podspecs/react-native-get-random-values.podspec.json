@@ -1,6 +1,6 @@
 {
   "name": "react-native-get-random-values",
-  "version": "1.9.0",
+  "version": "1.11.0",
   "summary": "getRandomValues for React Native",
   "description": "A small implementation of `getRandomValues` for React Native.",
   "homepage": "https://github.com/LinusU/react-native-get-random-values",
@@ -15,7 +15,7 @@
   },
   "source": {
     "git": "https://github.com/LinusU/react-native-get-random-values.git",
-    "tag": "v1.9.0"
+    "tag": "v1.11.0"
   },
   "source_files": "ios/**/*.{h,m,swift}",
   "requires_arc": true,

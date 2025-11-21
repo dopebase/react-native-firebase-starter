@@ -1,6 +1,6 @@
 {
   "name": "RNScreens",
-  "version": "3.37.0",
+  "version": "4.18.0",
   "summary": "Native navigation primitives for your React Native app.",
   "description": "RNScreens - first incomplete navigation solution for your React Native app",
   "homepage": "https://github.com/software-mansion/react-native-screens",
@@ -9,31 +9,70 @@
     "author": "author@domain.cn"
   },
   "platforms": {
-    "ios": "9.0",
-    "tvos": "11.0",
+    "ios": "15.1",
+    "tvos": "15.1",
     "visionos": "1.0"
   },
   "source": {
     "git": "https://github.com/software-mansion/react-native-screens.git",
-    "tag": "3.37.0"
+    "tag": "4.18.0"
   },
   "source_files": [
-    "ios/**/*.{h,m,mm}",
-    "cpp/RNScreensTurboModule.cpp",
-    "cpp/RNScreensTurboModule.h"
+    "ios/**/*.{h,m,mm,cpp,swift}"
   ],
-  "project_header_files": "cpp/**/*.h",
+  "project_header_files": "ios/bridging/Swift-Bridging.h",
   "requires_arc": true,
-  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32",
+  "exclude_files": "ios/gamma/**/*.{h,m,mm,cpp,swift}",
+  "pod_target_xcconfig": {
+    "OTHER_CPLUSPLUSFLAGS": "$(inherited)  -DRCT_NEW_ARCH_ENABLED=1 -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DFOLLY_HAVE_CLOCK_GETTIME=1 -Wno-comma -Wno-shorten-64-to-32",
+    "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/Headers/Private/Yoga\"",
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++20",
+    "OTHER_SWIFT_FLAGS": "$(inherited) -DRCT_NEW_ARCH_ENABLED"
+  },
+  "compiler_flags": "-DRCT_NEW_ARCH_ENABLED=1 -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -DFOLLY_HAVE_CLOCK_GETTIME=1 -Wno-comma -Wno-shorten-64-to-32",
   "dependencies": {
     "React-Core": [],
     "RCT-Folly": [
-      "2021.07.22.00"
+      "2024.11.18.00"
     ],
+    "glog": [],
+    "React-RCTFabric": [],
+    "ReactCodegen": [],
+    "RCTRequired": [],
+    "RCTTypeSafety": [],
+    "ReactCommon/turbomodule/bridging": [],
+    "ReactCommon/turbomodule/core": [],
+    "React-NativeModulesApple": [],
+    "Yoga": [],
+    "React-Fabric": [],
+    "React-graphics": [],
+    "React-utils": [],
+    "React-featureflags": [],
+    "React-debug": [],
+    "React-ImageManager": [],
+    "React-rendererdebug": [],
+    "DoubleConversion": [],
+    "React-jsi": [],
+    "React-renderercss": [],
+    "hermes-engine": [],
+    "React-hermes": [],
     "React-RCTImage": []
   },
-  "pod_target_xcconfig": {
-    "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/boost\"",
-    "CLANG_CXX_LANGUAGE_STANDARD": "c++17"
-  }
+  "subspecs": [
+    {
+      "name": "common",
+      "source_files": [
+        "common/cpp/**/*.{cpp,h}",
+        "cpp/**/*.{cpp,h}"
+      ],
+      "project_header_files": [
+        "common/cpp/**/*.h",
+        "cpp/**/*.h"
+      ],
+      "header_dir": "rnscreens",
+      "pod_target_xcconfig": {
+        "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/common/cpp\""
+      }
+    }
+  ]
 }

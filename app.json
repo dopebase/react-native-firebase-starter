@@ -1,16 +1,4 @@
 {
   "name": "Instamobile",
-  "displayName": "Instamobile",
-  "plugins": [
-    "expo-tracking-transparency",
-    "@react-native-google-signin/google-signin"
-  ],
-  "expo": {
-    "android": {
-      "googleServicesFile": "./android/app/google-services.json"
-    },
-    "ios": {
-      "googleServicesFile": "./ios/Instamobile/GoogleService-Info.plist"
-    }
-  }
+  "displayName": "Instamobile"
 }

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, TouchableOpacity, ScrollView, Modal } from 'react-native'
-import Checkbox from 'expo-checkbox'
+import CheckBox from '@react-native-community/checkbox'
 import { useTheme, useTranslations } from '../../../core'
 import dynamicStyles from './styles'
 
@@ -81,7 +81,7 @@ export const DropdownPicker = ({
                         styles.item,
                       ]}>
                       {allowMultipleSelection && (
-                        <Checkbox
+                        <CheckBox
                           style={styles.checkbox}
                           value={selectedItems.includes(itm)}
                         />

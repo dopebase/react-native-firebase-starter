@@ -23,5 +23,5 @@
       "10.3.0"
     ]
   },
-  "static_framework": true
+  "static_framework": false
 }

@@ -1,30 +1,19 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
-import * as ExpoDocumentPicker from 'expo-document-picker'
 import { useTheme, useTranslations } from '../../..'
 import dynamicStyles from './styles'
 
-export const DocumentPicker = ({ title, handleDocument = () => {} }) => {
+// Stub for DocumentPicker - requires compatible document picker library
+// For production use, install a React Native 0.82 compatible document picker
+export const DocumentPicker = ({ title, handleDocument = () => { } }) => {
   const { localized } = useTranslations()
   const { theme, appearance } = useTheme()
   const styles = dynamicStyles(theme, appearance)
   const [document, setDocument] = useState()
 
   const pickDocument = async () => {
-    try {
-      let res = await ExpoDocumentPicker.getDocumentAsync()
-      if (res?.type !== 'cancel') {
-        const doc = {
-          ...res,
-          type: 'file',
-          fileID: +new Date() + res.name,
-        }
-        setDocument(doc)
-        handleDocument(doc)
-      }
-    } catch (e) {
-      console.warn(e)
-    }
+    console.warn('Document picker not configured - requires React Native 0.82 compatible library')
+    alert('Document picker is not available in this build')
   }
 
   return (

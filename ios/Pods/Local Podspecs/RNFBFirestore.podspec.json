@@ -27,5 +27,5 @@
       "< 2.30910.0"
     ]
   },
-  "static_framework": true
+  "static_framework": false
 }

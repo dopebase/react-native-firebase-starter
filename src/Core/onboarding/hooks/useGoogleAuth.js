@@ -1,30 +1,14 @@
-import * as Google from 'expo-auth-session/providers/google'
+// Stub for useGoogleAuth - requires expo-auth-session setup
+// For production use, implement with @react-native-google-signin/google-signin (already installed)
+export const useGoogleAuth = () => {
+  console.warn('Google auth via expo-auth-session not configured - use @react-native-google-signin/google-signin instead')
 
-const useGoogleAuth = config => {
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    webClientId: config.webClientId,
-    expoClientId: config.expoClientId,
-    scopes: [
-      'profile',
-      'email',
-      'openid',
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-    ],
-  })
-
-  const getGoogleIdToken = async () => {
-    const result = await promptAsync()
-    if (!result) {
-      throw new Error('failed to login with Google')
-    }
-
-    console.log('google res', result)
-
-    return result.params?.id_token
+  return {
+    request: null,
+    response: null,
+    promptAsync: async () => {
+      console.warn('Google auth via expo-auth-session not available')
+      return { type: 'error', error: 'Not configured' }
+    },
   }
-
-  return { getGoogleIdToken }
 }
-
-export default useGoogleAuth

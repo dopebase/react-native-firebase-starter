@@ -10,4 +10,5 @@
 // Remove these lines if you want to remove firebase and add your own custom backend:
 import authManager from './firebase/firebaseAuthManager'
 
+console.log('api/index.js: exporting authManager', authManager)
 export { authManager }

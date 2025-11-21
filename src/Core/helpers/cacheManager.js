@@ -1,8 +1,9 @@
 import * as _ from 'lodash'
-import * as FileSystem from 'expo-file-system'
+import RNFS from 'react-native-fs'
 import SHA1 from 'crypto-js/sha1'
+import { Platform } from 'react-native'
 
-const BASE_DIR = `${FileSystem.cacheDirectory}expo-cache/`
+const BASE_DIR = `${RNFS.CachesDirectoryPath}/expo-cache/`
 
 export class CacheEntry {
   constructor(uri, options) {
@@ -11,22 +12,29 @@ export class CacheEntry {
   }
 
   async getPath() {
-    const { uri, options } = this
+    const { uri } = this
     const { path, exists, tmpPath } = await getCacheEntry(uri)
     if (exists) {
       return path
     }
-    const result = await FileSystem.createDownloadResumable(
-      uri,
-      tmpPath,
-      options,
-    ).downloadAsync()
-    // If the image download failed, we don't cache anything
-    if (result && result.status !== 200) {
+
+    try {
+      const downloadResult = await RNFS.downloadFile({
+        fromUrl: uri,
+        toFile: tmpPath,
+      }).promise
+
+      // If the image download failed, we don't cache anything
+      if (downloadResult.statusCode !== 200) {
+        return undefined
+      }
+
+      await RNFS.moveFile(tmpPath, path)
+      return path
+    } catch (error) {
+      console.error('Cache download error:', error)
       return undefined
     }
-    await FileSystem.moveAsync({ from: tmpPath, to: path })
-    return path
   }
 }
 
@@ -41,16 +49,20 @@ export default class CacheManager {
   }
 
   static async clearCache() {
-    await FileSystem.deleteAsync(BASE_DIR, { idempotent: true })
-    await FileSystem.makeDirectoryAsync(BASE_DIR)
+    const exists = await RNFS.exists(BASE_DIR)
+    if (exists) {
+      await RNFS.unlink(BASE_DIR)
+    }
+    await RNFS.mkdir(BASE_DIR)
   }
 
   static async getCacheSize() {
-    const result = await FileSystem.getInfoAsync(BASE_DIR)
-    if (!result.exists) {
+    const exists = await RNFS.exists(BASE_DIR)
+    if (!exists) {
       throw new Error(`${BASE_DIR} not found`)
     }
-    return result.size
+    const stat = await RNFS.stat(BASE_DIR)
+    return stat.size
   }
 }
 
@@ -66,14 +78,14 @@ const getCacheEntry = async uri => {
 
   const path = `${BASE_DIR}${SHA1(uri)}${ext}`
   const tmpPath = `${BASE_DIR}${SHA1(uri)}-${_.uniqueId()}${ext}`
-  // TODO: maybe we don't have to do this every time
+
   try {
-    await FileSystem.makeDirectoryAsync(BASE_DIR)
+    await RNFS.mkdir(BASE_DIR)
   } catch (e) {
-    // do nothing
+    // directory might already exist
   }
-  const info = await FileSystem.getInfoAsync(path)
-  const { exists } = info
+
+  const exists = await RNFS.exists(path)
   return { exists, path, tmpPath }
 }
 
@@ -83,7 +95,7 @@ export const loadCachedItem = async ({ uri, options = {} }) => {
       const path = await CacheManager.get(uri, options).getPath()
 
       if (path) {
-        return path
+        return Platform.OS === 'android' ? `file://${path}` : path
       } else {
         return uri
       }
