@@ -1,7 +1,7 @@
 import { db } from '../../../firebase/config'
 import { getUnixTimeStamp } from '../../../helper/timeFormat'
 
-export const usersRef = db.collection('users')
+export const usersRef = () => db().collection('users')
 
 export const updateUser = async (userID, newData) => {
   const dataWithOnlineStatus = {
@@ -9,7 +9,7 @@ export const updateUser = async (userID, newData) => {
     lastOnlineTimestamp: getUnixTimeStamp(),
   }
   try {
-    await usersRef.doc(userID).set({ ...dataWithOnlineStatus }, { merge: true })
+    await usersRef().doc(userID).set({ ...dataWithOnlineStatus }, { merge: true })
     return { success: true }
   } catch (error) {
     return error
@@ -18,7 +18,7 @@ export const updateUser = async (userID, newData) => {
 
 export const getUserByID = async userID => {
   try {
-    const document = await usersRef.doc(userID).get()
+    const document = await usersRef().doc(userID).get()
     if (document) {
       return document.data()
     }
@@ -31,7 +31,7 @@ export const getUserByID = async userID => {
 
 export const updateProfilePhoto = async (userID, profilePictureURL) => {
   try {
-    await usersRef.doc(userID).update({ profilePictureURL: profilePictureURL })
+    await usersRef().doc(userID).update({ profilePictureURL: profilePictureURL })
     return { success: true }
   } catch (error) {
     console.log(error)

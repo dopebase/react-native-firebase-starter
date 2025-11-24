@@ -1,10 +1,10 @@
 import React, { memo, useEffect, useLayoutEffect, useCallback } from 'react'
 import { Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import { useTheme, useTranslations, TouchableIcon } from '../../core/dopebase'
+import { useTheme, useTranslations, TouchableIcon } from '../../Core/dopebase'
 import dynamicStyles from './styles'
-import { useCurrentUser } from '../../core/onboarding'
-import { useAuth } from '../../core/onboarding/hooks/useAuth'
+import { useCurrentUser } from '../../Core/onboarding'
+import { useAuth } from '../../Core/onboarding/hooks/useAuth'
 
 export const HomeScreen = memo(props => {
   const { navigation } = props

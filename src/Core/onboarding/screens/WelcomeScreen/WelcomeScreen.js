@@ -59,9 +59,24 @@ const WelcomeScreen = props => {
   }
 
   const tryToLoginFirst = async () => {
-    authManager
-      .retrievePersistedAuthUser(config)
+    console.log('WelcomeScreen: tryToLoginFirst started')
+    console.log('WelcomeScreen: authManager is', authManager)
+    if (!authManager?.retrievePersistedAuthUser) {
+      console.log('WelcomeScreen: authManager.retrievePersistedAuthUser is missing')
+      setIsLoading(false)
+      return
+    }
+    const timeout = new Promise((resolve) => {
+      setTimeout(() => resolve({ timeout: true }), 2500)
+    })
+
+    Promise.race([authManager.retrievePersistedAuthUser(config), timeout])
       .then(response => {
+        if (response?.timeout) {
+          console.log('WelcomeScreen: login check timed out')
+          setIsLoading(false)
+          return
+        }
         if (response?.user) {
           const user = response.user
           dispatch(
@@ -145,14 +160,14 @@ const WelcomeScreen = props => {
         onPress={() => {
           config.isSMSAuthEnabled
             ? navigation.navigate('LoginStack', {
-                screen: 'Sms',
-                params: {
-                  isSigningUp: false,
-                },
-              })
+              screen: 'Sms',
+              params: {
+                isSigningUp: false,
+              },
+            })
             : navigation.navigate('LoginStack', {
-                screen: 'Login',
-              })
+              screen: 'Login',
+            })
         }}>
         {localized('Log In')}
       </Button>
@@ -164,14 +179,14 @@ const WelcomeScreen = props => {
         onPress={() => {
           config.isSMSAuthEnabled
             ? navigation.navigate('LoginStack', {
-                screen: 'Sms',
-                params: {
-                  isSigningUp: true,
-                },
-              })
+              screen: 'Sms',
+              params: {
+                isSigningUp: true,
+              },
+            })
             : navigation.navigate('LoginStack', {
-                screen: 'Signup',
-              })
+              screen: 'Signup',
+            })
         }}>
         {localized('Sign Up')}
       </Button>

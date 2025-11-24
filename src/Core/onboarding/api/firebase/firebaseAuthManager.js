@@ -1,6 +1,4 @@
 import Geolocation from '@react-native-community/geolocation'
-import * as Location from 'expo-location'
-import * as Facebook from 'expo-facebook'
 import appleAuth, {
   AppleAuthRequestScope,
   AppleAuthRequestOperation,
@@ -234,46 +232,10 @@ const loginOrSignUpWithGoogle = appConfig => {
 }
 
 const loginOrSignUpWithFacebook = appConfig => {
-  Facebook.initializeAsync(appConfig.facebookIdentifier)
-
+  // Facebook login requires additional setup with react-native-fbsdk-next
+  // For now, returning an error
   return new Promise(async (resolve, _reject) => {
-    try {
-      const { type, token, expires, permissions, declinedPermissions } =
-        await Facebook.logInWithReadPermissionsAsync({
-          permissions: ['public_profile', 'email'],
-        })
-
-      if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        // const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-        // Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-        authAPI
-          .loginWithFacebook(token, appConfig.appIdentifier)
-          .then(async response => {
-            if (response?.user) {
-              const newResponse = {
-                user: { ...response.user },
-                accountCreated: response.accountCreated,
-              }
-              handleSuccessfulLogin(
-                newResponse.user,
-                response.accountCreated,
-              ).then(response => {
-                // resolve(response);
-                resolve({
-                  ...response,
-                })
-              })
-            } else {
-              resolve({ error: ErrorCode.fbAuthFailed })
-            }
-          })
-      } else {
-        resolve({ error: ErrorCode.fbAuthCancelled })
-      }
-    } catch (error) {
-      resolve({ error: ErrorCode.fbAuthFailed })
-    }
+    resolve({ error: 'Facebook login not configured. Please use react-native-fbsdk-next' })
   })
 }
 
@@ -421,32 +383,18 @@ const fetchAndStoreExtraInfoUponLogin = async (user, accountCreated) => {
 }
 
 const getCurrentLocation = () => {
-  return new Promise(async resolve => {
-    let { status } = await Location.requestForegroundPermissionsAsync()
-    if (status !== 'granted') {
-      resolve({ coords: { latitude: '', longitude: '' } })
-      return
-    }
-
+  return new Promise(resolve => {
     Geolocation.getCurrentPosition(
       location => {
         console.log(location)
         resolve(location)
       },
       error => {
-        //        EventRegister.emit('get_current_position_failed')
         console.log(error)
+        resolve({ coords: { latitude: '', longitude: '' } })
       },
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
     )
-
-    // setRegion(location.coords);
-    // onLocationChange(location.coords);
-
-    // Geolocation.getCurrentPosition(
-    //     resolve,
-    //     () => resolve({ coords: { latitude: "", longitude: "" } }),
-    //     { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
-    // );
   })
 }
 

@@ -7,8 +7,8 @@ import {
   Platform,
   Image,
 } from 'react-native'
-import ImageView from 'react-native-image-view'
-import * as ImagePicker from 'expo-image-picker'
+import ImageView from 'react-native-image-viewing'
+import { launchImageLibrary } from 'react-native-image-picker'
 import { useActionSheet, useTheme, useTranslations } from '../../..'
 import dynamicStyles from './styles'
 
@@ -49,9 +49,7 @@ export const ProfilePictureSelector = props => {
       const isAvatar = url.search('avatar')
       const image = [
         {
-          source: {
-            uri: url,
-          },
+          uri: url,
         },
       ]
       if (isAvatar === -1) {
@@ -72,21 +70,6 @@ export const ProfilePictureSelector = props => {
     setProfilePictureURL(defaultProfilePhotoURL)
   }
 
-  const getPermissionAsync = async () => {
-    if (Platform.OS === 'ios') {
-      let permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync(false)
-
-      if (permissionResult.granted === false) {
-        alert(
-          localized(
-            'Sorry, we need camera roll permissions to make this work.',
-          ),
-        )
-      }
-    }
-  }
-
   const onPressAddPhotoBtn = async () => {
     const options = {
       title: localized('Select photo'),
@@ -95,27 +78,28 @@ export const ProfilePictureSelector = props => {
       chooseFromLibraryButtonTitle: localized('Choose from Library'),
       maxWidth: 2000,
       maxHeight: 2000,
+      mediaType: 'photo',
       storageOptions: {
         skipBackup: true,
         path: 'images',
       },
     }
 
-    await getPermissionAsync()
-
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      // allowsEditing: true,
-      // aspect: [4, 3],
-      // quality: 1,
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker')
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage)
+      } else if (response.assets && response.assets.length > 0) {
+        const asset = response.assets[0]
+        setProfilePictureURL(asset.uri)
+        props.setProfilePictureFile({
+          uri: asset.uri,
+          type: asset.type,
+          fileName: asset.fileName,
+        })
+      }
     })
-
-    console.log(result)
-
-    if (!result.cancelled) {
-      setProfilePictureURL(result.uri)
-      props.setProfilePictureFile(result)
-    }
   }
 
   const closeButton = () => (
@@ -177,9 +161,9 @@ export const ProfilePictureSelector = props => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageView
           images={tappedImage}
-          isVisible={isImageViewerVisible}
-          onClose={() => setIsImageViewerVisible(false)}
-          controls={{ close: closeButton }}
+          visible={isImageViewerVisible}
+          onRequestClose={() => setIsImageViewerVisible(false)}
+          HeaderComponent={closeButton}
         />
       </ScrollView>
     </>

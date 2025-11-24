@@ -5,11 +5,11 @@ import { updateUser } from '../../../users'
 import { ErrorCode } from '../ErrorCode'
 import { getUnixTimeStamp } from '../../../helpers/timeFormat'
 
-const usersRef = firestore().collection('users')
+const usersRef = () => firestore().collection('users')
 
 const handleUserFromAuthStateChanged = (user, resolve) => {
   if (user) {
-    usersRef
+    usersRef()
       .doc(user.uid)
       .get()
       .then(document => {
@@ -41,7 +41,7 @@ export const checkUniqueUsername = username => {
     if (!username) {
       resolve()
     }
-    usersRef
+    usersRef()
       .where('username', '==', username?.toLowerCase())
       .get()
       .then(querySnapshot => {
@@ -99,7 +99,7 @@ export const registerWithEmail = (userDetails, appIdentifier) => {
           appIdentifier,
           createdAt: timestamp,
         }
-        usersRef
+        usersRef()
           .doc(uid)
           .set(data)
           .then(() => {
@@ -132,7 +132,7 @@ export const loginWithEmailAndPassword = async (email, password) => {
           email,
           id: uid,
         }
-        usersRef
+        usersRef()
           .doc(uid)
           .get()
           .then(function (firestoreDocument) {
@@ -200,7 +200,7 @@ const signInWithCredential = (credential, appIdentifier, socialAuthType) => {
             createdAt: timestamp,
             ...(socialAuthType ? { socialAuthType } : {}),
           }
-          usersRef
+          usersRef()
             .doc(uid)
             .set(userData)
             .then(() => {
@@ -210,7 +210,7 @@ const signInWithCredential = (credential, appIdentifier, socialAuthType) => {
               })
             })
         }
-        usersRef
+        usersRef()
           .doc(uid)
           .get()
           .then(document => {
@@ -287,7 +287,7 @@ export const retrieveUserByPhone = phone => {
     if (!phone) {
       resolve()
     }
-    usersRef
+    usersRef()
       .where('phone', '==', phone)
       .get()
       .then(querySnapshot => {
@@ -324,7 +324,7 @@ export const loginWithSMSCode = (smsCode, verificationID) => {
       .signInWithCredential(credential)
       .then(result => {
         const { user } = result
-        usersRef
+        usersRef()
           .doc(user.uid)
           .get()
           .then(function (firestoreDocument) {
@@ -392,7 +392,7 @@ export const registerWithPhoneNumber = (
           appIdentifier,
           createdAt: timestamp,
         }
-        usersRef
+        usersRef()
           .doc(uid)
           .set(data)
           .then(() => {
@@ -413,7 +413,7 @@ export const registerWithPhoneNumber = (
 
 export const updateProfilePhoto = (userID, profilePictureURL) => {
   return new Promise((resolve, _reject) => {
-    usersRef
+    usersRef()
       .doc(userID)
       .update({ profilePictureURL: profilePictureURL })
       .then(() => {
@@ -444,7 +444,7 @@ export const fetchAndStorePushTokenIfPossible = async user => {
 
 export const removeUser = userID => {
   return new Promise(resolve => {
-    usersRef
+    usersRef()
       .doc(userID)
       .delete()
       .then(() => {

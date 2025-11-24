@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import { useTranslations } from '../core/dopebase'
+import { useTranslations } from '../Core/dopebase'
 import { HomeScreen } from '../screens'
 
 const MainStack = createStackNavigator()

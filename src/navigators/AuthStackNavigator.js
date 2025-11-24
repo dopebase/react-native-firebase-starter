@@ -6,7 +6,7 @@ import {
   SignupScreen,
   SmsAuthenticationScreen,
   ResetPasswordScreen,
-} from '../core/onboarding'
+} from '../Core/onboarding'
 import { StyleSheet } from 'react-native'
 
 const AuthStack = createStackNavigator()

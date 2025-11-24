@@ -7,7 +7,7 @@ import {
   Dimensions,
   Image,
 } from 'react-native'
-import Modal from 'react-native-modalbox'
+import Modal from 'react-native-modal'
 import styles from './styles'
 
 const { width, height } = Dimensions.get('window')
@@ -78,16 +78,18 @@ export class MediaViewerModal extends React.Component {
     return (
       <Modal
         style={styles.container}
-        isOpen={isModalOpen}
-        onClosed={onClosed}
-        position="center"
-        swipeToClose
-        swipeArea={swipeArea}
-        swipeThreshold={4}
-        coverScreen={true}
-        backButtonClose={true}
+        isVisible={isModalOpen}
+        onBackdropPress={onClosed}
+        onBackButtonPress={onClosed}
+        onSwipeComplete={onClosed}
+        swipeDirection={['down']}
+        propagateSwipe={true}
         useNativeDriver={Platform.OS === 'android' ? true : false}
-        animationDuration={500}>
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        animationInTiming={500}
+        animationOutTiming={500}
+        coverScreen={true}>
         {this.renderCloseButton()}
         <ScrollView
           ref={this.onScrollView}

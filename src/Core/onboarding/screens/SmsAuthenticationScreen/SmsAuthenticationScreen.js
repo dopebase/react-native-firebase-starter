@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import PhoneInput from 'react-native-phone-input'
+import PhoneInput from 'react-native-phone-number-input'
 import {
   CodeField,
   Cursor,
@@ -25,7 +25,6 @@ import {
   ActivityIndicator,
   Alert,
   ProfilePictureSelector,
-  CountriesModalPicker,
 } from '../../../dopebase'
 import { setUserData } from '../../redux/auth'
 import { useDispatch } from 'react-redux'
@@ -83,17 +82,14 @@ const SmsAuthenticationScreen = () => {
 
   const phoneRef = useRef(null)
 
+  const [value, setValue] = useState('')
+  const [formattedValue, setFormattedValue] = useState('')
+
   useEffect(() => {
     if (codeInputValue?.trim()?.length === codeInputCellCount) {
       onFinishCheckingCode(codeInputValue)
     }
   }, [codeInputValue])
-
-  useEffect(() => {
-    if (phoneRef && phoneRef.current) {
-      setCountriesPickerData(phoneRef.current.getPickerData())
-    }
-  }, [phoneRef])
 
   const onFBButtonPress = () => {
     setLoading(true)
@@ -239,8 +235,9 @@ const SmsAuthenticationScreen = () => {
 
 
   const onPressSend = async () => {
-    if (phoneRef.current.isValidNumber()) {
-      const userValidPhoneNumber = phoneRef.current.getValue()
+    const isValid = phoneRef.current?.isValidNumber(value);
+    if (isValid) {
+      const userValidPhoneNumber = formattedValue
       setLoading(true)
       setPhoneNumber(userValidPhoneNumber)
       if (isSigningUp) {
@@ -273,14 +270,6 @@ const SmsAuthenticationScreen = () => {
         },
       )
     }
-  }
-
-  const onPressFlag = () => {
-    setCountryModalVisible(true)
-  }
-
-  const onPressCancelContryModalPicker = () => {
-    setCountryModalVisible(false)
   }
 
   const onFinishCheckingCode = newCode => {
@@ -320,38 +309,26 @@ const SmsAuthenticationScreen = () => {
     }))
   }
 
-  const selectCountry = country => {
-    phoneRef.current.selectCountry(country.iso2)
-  }
-
   const renderPhoneInput = () => {
     return (
       <>
         <PhoneInput
-          style={styles.InputContainer}
-          flagStyle={styles.flagStyle}
-          textStyle={styles.phoneInputTextStyle}
           ref={phoneRef}
-          initialCountry={'us'}
-          onPressFlag={onPressFlag}
-          offset={10}
-          allowZeroAfterCountryCode
-          textProps={{
-            placeholder: localized('Phone number'),
-            placeholderTextColor: '#aaaaaa',
+          defaultValue={value}
+          defaultCode="US"
+          layout="first"
+          onChangeText={(text) => {
+            setValue(text);
           }}
+          onChangeFormattedText={(text) => {
+            setFormattedValue(text);
+          }}
+          containerStyle={{ width: '100%', height: 60, backgroundColor: '#f5f5f5', borderRadius: 10, marginVertical: 10 }}
+          textContainerStyle={{ backgroundColor: '#f5f5f5', borderRadius: 10 }}
+          withDarkTheme
+          withShadow
+          autoFocus
         />
-        {countriesPickerData && (
-          <CountriesModalPicker
-            data={countriesPickerData}
-            onChange={country => {
-              selectCountry(country)
-            }}
-            cancelText={localized('Cancel')}
-            visible={countryModalVisible}
-            onCancel={onPressCancelContryModalPicker}
-          />
-        )}
         <TouchableOpacity style={styles.sendContainer} onPress={onPressSend}>
           <Text style={styles.sendText}>{localized('Send code')}</Text>
         </TouchableOpacity>
@@ -440,10 +417,10 @@ const SmsAuthenticationScreen = () => {
   const renderAsLoginState = () => {
     const appleButtonStyle = config.isAppleAuthEnabled
       ? {
-          dark: AppleButton?.Style?.WHITE,
-          light: AppleButton?.Style?.BLACK,
-          'no-preference': AppleButton?.Style?.WHITE,
-        }
+        dark: AppleButton?.Style?.WHITE,
+        light: AppleButton?.Style?.BLACK,
+        'no-preference': AppleButton?.Style?.WHITE,
+      }
       : {}
 
     return (
